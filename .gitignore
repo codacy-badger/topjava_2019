@@ -1,9 +1,18 @@
+### IntelliJ IDEA ###
 .idea
-out
-target
+*.iws
 *.iml
+*.ipr
+/out/
+
+
+/target/
 log
 *.patch
 
+
+.gradle
+/build/
+!gradle/wrapper/gradle-wrapper.jar
 
 
