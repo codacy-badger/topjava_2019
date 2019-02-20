@@ -7,10 +7,13 @@ import org.springframework.stereotype.Controller;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.service.MealService;
 import ru.javawebinar.topjava.to.MealTo;
-import ru.javawebinar.topjava.util.MealsUtil;
+import ru.javawebinar.topjava.util.DateTimeUtil;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
+import static ru.javawebinar.topjava.util.MealsUtil.DEFAULT_CALORIES_PER_DAY;
 import static ru.javawebinar.topjava.util.MealsUtil.getWithExcess;
 import static ru.javawebinar.topjava.util.ValidationUtil.assureIdConsistent;
 import static ru.javawebinar.topjava.util.ValidationUtil.checkNew;
@@ -27,9 +30,19 @@ public class MealRestController {
         this.service = service;
     }
 
+    public List<MealTo> getAllBetween(LocalDate startDate, LocalTime startTime, LocalDate endDate, LocalTime endTime) {
+        log.info("getAllBetween");
+        return getWithExcess(service.getAllBetween(authUserId(),
+                DateTimeUtil.parse(startDate, LocalDate.MIN),
+                DateTimeUtil.parse(startTime, LocalTime.MIN),
+                DateTimeUtil.parse(endDate, LocalDate.MAX),
+                DateTimeUtil.parse(endTime, LocalTime.MAX)),
+                DEFAULT_CALORIES_PER_DAY);
+    }
+
     public List<MealTo> getAll() {
         log.info("getAllMeal");
-        return getWithExcess(service.getAll(authUserId()), MealsUtil.DEFAULT_CALORIES_PER_DAY);
+        return getWithExcess(service.getAll(authUserId()), DEFAULT_CALORIES_PER_DAY);
     }
 
     public Meal get(int id) {
